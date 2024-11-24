@@ -1,0 +1,79 @@
+---
+name: OpenSSL build and publish
+
+on:
+  workflow_call:
+    inputs:
+      distribution:
+        required: true
+        type: string
+      archive-name:
+        required: true
+        type: string
+      architecture:
+        required: false
+        type: string
+      suffix-dir:
+        required: false
+        type: string
+
+env:
+  OPENSSL_DIR: /usr/local/openssl
+  OPENSSL_VERSION: 3.2.0
+
+jobs:
+  build:
+    name: ${{ inputs.archive-name }}
+    runs-on: ${{ inputs.distribution }}
+    steps:
+      - name: Display cpuinfo
+        if: contains(runner.os, 'Linux')
+        run: cat /proc/cpuinfo
+
+      - run: |
+          sudo mkdir -p ${{ env.OPENSSL_DIR }}/ssl
+          sudo mkdir -p ${{ env.OPENSSL_DIR }}/lib64/ossl-modules
+          sudo chown -R $USER ${{ env.OPENSSL_DIR }}
+
+      - uses: actions/checkout@v3
+
+      - name: Build OpenSSL locally
+        env:
+          OPENSSL_DIR: ${{ env.OPENSSL_DIR }}
+          OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
+          ARCHITECTURE: ${{ inputs.architecture }}
+        run: |
+          sudo mkdir -p ${{ env.OPENSSL_DIR }}
+          sudo chown -R $USER ${{ env.OPENSSL_DIR }}
+          bash .github/scripts/local_ossl_instl.sh
+
+      - name: Upload KMS for ${{ inputs.distribution }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.archive-name }}
+          path: ${{ env.OPENSSL_DIR }}/${{ env.OPENSSL_VERSION }}.tar.gz
+          retention-days: 1
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: [self-hosted, not-sgx]
+    container:
+      image: cosmian/docker_doc_ci
+      volumes:
+        - /home/cosmian/.ssh/id_rsa:/root/.ssh/id_rsa
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.archive-name }}
+
+      - run: find .
+        if: contains(runner.os, 'linux')
+
+      - name: Publish to package.cosmian.com
+        if: contains(runner.os, 'Linux')
+        env: 
+          OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
+          SUFFIX_DIR: ${{ inputs.suffix-dir }}
+        run: |
+          bash .github/scripts/publish.sh

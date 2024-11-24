@@ -1,0 +1,10 @@
+---
+name: OpenSSL multi-platform build
+
+on:
+  push:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build_all.yml
+    secrets: inherit

@@ -1,0 +1,42 @@
+---
+name: Build all
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+
+          - distribution: ubuntu-22.04
+            archive-name: ubuntu_22_04
+            architecture: x86_64
+            suffix-dir: linux/amd64
+
+          - distribution: ubuntu-22.04
+            archive-name: ubuntu_22_04
+            architecture: aarch64
+            suffix-dir: linux/aarch64
+
+          - distribution: macos-12
+            archive-name: macos_intel
+            architecture: x86_64
+            suffix-dir: macos/amd64
+
+          - distribution: macos-14
+            archive-name: macos_arm
+            architecture: aarch64
+            suffix-dir: macos/aarch64
+
+    name: ${{ matrix.distribution }}
+    uses: ./.github/workflows/openssl.yml
+    secrets: inherit
+    with:
+      distribution: ${{ matrix.distribution }}
+      archive-name: ${{ matrix.archive-name }}
+      architecture: ${{ matrix.architecture }}
+      suffix-dir: ${{ matrix.suffix-dir }}
+
