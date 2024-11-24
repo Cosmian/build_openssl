@@ -23,7 +23,7 @@ env:
 
 jobs:
   build:
-    name: Build ${{ inputs.archive-name }}-${{ inputs.architecture }}
+    name: Build ${{ inputs.archive-name }}-${{ inputs.suffix-dir }}
     runs-on: ${{ inputs.distribution }}
     steps:
       - name: Display cpuinfo
@@ -57,7 +57,7 @@ jobs:
 
   publish:
     needs: build
-    name: Publish ${{ inputs.archive-name }}-${{ inputs.architecture }}
+    name: Publish ${{ inputs.archive-name }}-${{ inputs.suffix-dir }}
     runs-on: [self-hosted, not-sgx]
     container:
       image: cosmian/docker_doc_ci
