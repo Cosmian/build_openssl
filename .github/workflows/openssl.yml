@@ -23,7 +23,7 @@ env:
 
 jobs:
   build:
-    name: ${{ inputs.archive-name }}
+    name: Build ${{ inputs.archive-name }}-${{ inputs.architecture }}
     runs-on: ${{ inputs.distribution }}
     steps:
       - name: Display cpuinfo
@@ -57,12 +57,14 @@ jobs:
 
   publish:
     needs: build
+    name: Publish ${{ inputs.archive-name }}-${{ inputs.architecture }}
     runs-on: [self-hosted, not-sgx]
     container:
       image: cosmian/docker_doc_ci
       volumes:
         - /home/cosmian/.ssh/id_rsa:/root/.ssh/id_rsa
     steps:
+      - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.archive-name }}-${{ inputs.architecture}}

@@ -16,11 +16,6 @@ jobs:
             architecture: x86_64
             suffix-dir: linux/amd64
 
-          - distribution: macos-14
-            archive-name: macos_arm
-            architecture: aarch64
-            suffix-dir: linux/aarch64
-
           - distribution: macos-12
             archive-name: macos_intel
             architecture: x86_64
