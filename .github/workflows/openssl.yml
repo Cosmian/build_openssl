@@ -50,8 +50,8 @@ jobs:
       - name: Upload KMS for ${{ inputs.distribution }}
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.archive-name }}
-          path: ${{ env.OPENSSL_DIR }}/${{ env.OPENSSL_VERSION }}.tar.gz
+          name: ${{ inputs.archive-name }}-${{ inputs.architecture}}
+          path: openssl-${{ env.OPENSSL_VERSION }}/${{ env.OPENSSL_VERSION }}.tar.gz
           retention-days: 1
           if-no-files-found: error
 
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.archive-name }}
+          name: ${{ inputs.archive-name }}-${{ inputs.architecture}}
 
       - run: find .
         if: contains(runner.os, 'linux')

@@ -10,7 +10,7 @@ fi
 env
 
 echo "Setup for OpenSSL version $OPENSSL_VERSION with FIPS module"
-echo "Installing OpenSSL to ${1}..."
+echo "Installing OpenSSL to ${OPENSSL_DIR}..."
 
 # Creating ssl config files directory.
 rm -rf "${OPENSSL_DIR}/ssl"
@@ -28,9 +28,7 @@ tar -xf "${VERSION}".tar.gz
 rm "${VERSION}".tar.gz
 
 cd "${VERSION}"/
-if [ "${2}" = "cross-compile-windows" ]; then
-    ./Configure mingw64 --cross-compile-prefix=x86_64-w64-mingw32- --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}/ssl" threads enable-fips no-shared enable-weak-ssl-ciphers
-elif [ "${ARCHITECTURE}" = "aarch64" ]; then
+if [ "${ARCHITECTURE}" = "aarch64" ]; then
     ./Configure linux-aarch64 --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}/ssl" threads enable-fips no-shared enable-weak-ssl-ciphers
 else
     ./Configure --prefix="${OPENSSL_DIR}" --openssldir="${OPENSSL_DIR}/ssl" threads enable-fips no-shared enable-weak-ssl-ciphers
@@ -64,3 +62,4 @@ echo -e "If this program was not sourced, remember to export the absolute path o
 tar -czf "${OPENSSL_VERSION}".tar.gz -C "${OPENSSL_DIR}" .
 
 pwd
+find .

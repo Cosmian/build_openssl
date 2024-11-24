@@ -16,8 +16,8 @@ jobs:
             architecture: x86_64
             suffix-dir: linux/amd64
 
-          - distribution: ubuntu-22.04
-            archive-name: ubuntu_22_04
+          - distribution: macos-14
+            archive-name: macos_arm
             architecture: aarch64
             suffix-dir: linux/aarch64
 
@@ -28,10 +28,10 @@ jobs:
 
           - distribution: macos-14
             archive-name: macos_arm
-            architecture: aarch64
+            # architecture: aarch64 # omit on purpose
             suffix-dir: macos/aarch64
 
-    name: ${{ matrix.distribution }}
+    name: ${{ matrix.distribution }}-${{ matrix.architecture }}
     uses: ./.github/workflows/openssl.yml
     secrets: inherit
     with:
