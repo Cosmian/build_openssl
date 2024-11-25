@@ -12,15 +12,19 @@ jobs:
         include:
           - distribution: ubuntu-20.04
             archive-name: ubuntu_20_04
+            architecture: x86_64
 
           - distribution: ubuntu-22.04
             archive-name: ubuntu_22_04
+            architecture: x86_64
 
           - distribution: ubuntu-24.04
             archive-name: ubuntu_24_04
+            architecture: x86_64
 
           - distribution: macos-14
             archive-name: macos_arm
+            architecture: arm64
 
     name: ${{ matrix.distribution }}
     uses: ./.github/workflows/openssl.yml

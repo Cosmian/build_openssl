@@ -10,6 +10,9 @@ on:
       archive-name:
         required: true
         type: string
+      architecture:
+        required: true
+        type: string
 
 env:
   OPENSSL_DIR: /usr/local/openssl
@@ -68,5 +71,6 @@ jobs:
         env: 
           OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
           ARCHIVE_NAME: ${{ inputs.archive-name }}
+          ARCHITECTURE: ${{ inputs.architecture }}
         run: |
           bash .github/scripts/publish.sh
