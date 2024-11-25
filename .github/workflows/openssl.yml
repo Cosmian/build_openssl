@@ -47,7 +47,7 @@ jobs:
           sudo chown -R $USER ${{ env.OPENSSL_DIR }}
           bash .github/scripts/local_ossl_instl.sh
 
-      - name: Upload KMS for ${{ inputs.distribution }}
+      - name: Upload OpenSSL library for ${{ inputs.distribution }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.archive-name }}-${{ inputs.architecture}}

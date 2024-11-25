@@ -2,6 +2,17 @@
 
 set -ex
 
+
+if [ -z "$OPENSSL_DIR" ]; then
+    echo "Error: OPENSSL_DIR is not set."
+    exit 1
+fi
+
+if [ -z "$OPENSSL_VERSION" ]; then
+    echo "Error: OPENSSL_VERSION is not set."
+    exit 1
+fi
+
 if [[ ! "${OPENSSL_DIR}" = /* ]]; then
     echo "Error: path must be absolute (ex: /tmp/openssl_fips)"
     exit 1
