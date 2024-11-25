@@ -32,4 +32,4 @@ jobs:
     with:
       distribution: ${{ matrix.distribution }}
       archive-name: ${{ matrix.archive-name }}
-
+      architecture: ${{ matrix.architecture }}
