@@ -22,6 +22,10 @@ jobs:
             archive-name: ubuntu_24_04
             architecture: x86_64
 
+          - distribution: macos-13
+            archive-name: macos_intel
+            architecture: x86_64
+
           - distribution: macos-14
             archive-name: macos_arm
             architecture: arm64
